@@ -37,10 +37,10 @@ const ReservationSchema = new Schema(
 
     night: {
       type: Number,
-      required: true,
-    //   set: function (){
-    //       return Number(this.departure_date.split("-")[2]) - Number(this.arrival_date.split("-")[2])
-    //   }  //! if user makes a reservation in a month
+      // required: true,
+      // set: function (){
+      //     return Number(this.departure_date.split("-")[2]) - Number(this.arrival_date.split("-")[2])
+      // }  //! if user makes a reservation in a month
     set: function(){
         const arrival = new Date(this.arrival_date) //! arrival_date in milliseconds
         const departure = new Date(this.departure_date) //! departure_date in milliseconds
@@ -56,26 +56,26 @@ const ReservationSchema = new Schema(
 
     price: {
       type: Number,
-      required: true,
-      enum: [100, 150, 200, 300],
+      // required: true,
+      // enum: [100, 150, 200, 300],
     },
 
     totalprice: {
       type: Number,
-      required: true,
-      set: function(){
-        if(this.guest_number == 1){
-              return this.totalprice = this.price.enum[0]
-        }else if(this.guest_number == 2){
-              return this.totalprice = this.price.enum[1] 
-        }else if(this.guest_number == 4){
-            return this.totalprice = this.price.enum[2]
-        }else if(this.guest_number > 4 ){
-            return this.totalprice = this.price.enum[3]
-        }else {
-            throw new Error("Please enter a valid number")
-        }
-    }
+      // required: true,
+    //   set: function(){
+    //     if(this.guest_number == 1){
+    //           return this.totalprice = this.price.enum[0]
+    //     }else if(this.guest_number == 2){
+    //           return this.totalprice = this.price.enum[1] 
+    //     }else if(this.guest_number == 4){
+    //         return this.totalprice = this.price.enum[2]
+    //     }else if(this.guest_number > 4 ){
+    //         return this.totalprice = this.price.enum[3]
+    //     }else {
+    //         throw new Error("Please enter a valid number")
+    //     }
+    // }
     },
   },
   {

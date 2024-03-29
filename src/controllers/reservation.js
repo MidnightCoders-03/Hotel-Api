@@ -4,10 +4,22 @@ const Reservation = require("../models/reservation")
 const User = require('../models/user')
 const Room = require('../models/room')
 
+const nightCalc=(arrival_date,departure_date)=>{
+  const arrival = new Date(arrival_date) //! arrival_date in milliseconds
+  const departure = new Date(departure_date) //! departure_date in milliseconds
+  const difference = departure - arrival
+
+  const millisecondsPerDay = 1000 * 60 * 60 * 24 //! milliseconds in a day
+  const night = Math.floor ( difference / millisecondsPerDay) //! calculate the night as a day
+   
+  return night
+
+}
+
 module.exports = {
     list: async (req, res) => {
       let customFilter = {}
-      if(!req.user.isAdmin){
+      if(!req.user.isAdmin && !req.user.isStaff){
         customFilter = { userId: req.user.id}
       }
     
@@ -22,7 +34,20 @@ module.exports = {
     },
 
     create: async (req, res) => {
-      const {username, guest_number} = req.body
+      const {username, guest_number,departure_date, arrival_date} = req.body
+
+      const currentDate = Date.now()
+      const arrival = new Date(arrival_date) //! arrival_date in milliseconds
+      const departure = new Date(departure_date) //! departure_date in 
+      const notPassed=currentDate > arrival || currentDate > departure 
+      const invalidDate= arrival > departure
+
+      if(notPassed || invalidDate){
+        
+        res.errorStatusCode=400
+        throw new Error('Please enter valid dates')
+      }
+     
 
       const userId = (await User.findOne({username}))._id
       // console.log(userId);
@@ -47,14 +72,24 @@ module.exports = {
           res.errorStatusCode = 404
           throw new Error('Enter a valid guest number')
       }
-      
-      console.log(room[0]._id);
+      if(!req.body.price){
+        req.body.price = (await Room.findOne({_id:room[0]._id})).price
+        
+      }
+
+      // console.log(room[0]._id);
+      req.body.roomId=room[0]._id
       }else{
         const clientQuery = await Room.find({bedType:req.body.bedType})
-        console.log(clientQuery[0]._id);
+        // console.log(clientQuery[0]._id);
       }
-      
-      // const data = await Reservation.create(req.body)
+      req.body.night = nightCalc(arrival_date, departure_date)
+      // console.log(night);
+      req.body.totalPrice = req.body.night * req.body.price
+
+
+      console.log(req.body);
+      const data = await Reservation.create(req.body)
 
 
       res.status(201).send({
