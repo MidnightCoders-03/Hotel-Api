@@ -20,7 +20,10 @@ module.exports = {
     },
 
     create: async (req, res) => {
+      
+
       const data = await Reservation.create(req.body)
+
 
       rs.status(201).send({
         error: false,

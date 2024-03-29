@@ -4,17 +4,12 @@
 -------------------------------------------------------*/
 const router = require("express").Router();
 /*-------------------------------------------------------*/
-// User Routes:
+// Auth Routes:
 
-const User = require("../controllers/user");
 
-router.route("/").get(User.list).post(User.create);
+const Auth = require("../controllers/auth")
 
-router
-  .route("/:userId")
-  .get(User.read)
-  .put(User.update)
-  .patch(User.update)
-  .delete(User.delete);
+router.post("/login", Auth.login);
+router.get("/logout", Auth.logout);  //? swagger .all kabul etmiyor
 
-module.exports = router;
+module.exports=router
