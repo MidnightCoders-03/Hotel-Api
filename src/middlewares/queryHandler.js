@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = (req, res, next) => {
-   const { filter, search, sort, limit, page, skip } = req.query
+   let { filter, search, sort, limit, page, skip } = req.query
 
     limit = Number(limit) 
     limit = limit > 0 ? limit : Number(process.env.PAGE_SIZE)

@@ -13,6 +13,7 @@
 const express = require('express')
 const app = express()
 
+
 /* ------------------------------------------------------- */
 // Required Modules:
 
@@ -36,6 +37,9 @@ dbConnection()
 
 // Accept JSON:
 app.use(express.json())
+
+// Query Handler:
+app.use(require('./src/middlewares/queryHandler'))
 
 // Logger:
 
