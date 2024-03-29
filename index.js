@@ -50,7 +50,7 @@ app.use(express.json())
 // Routes:
 
 // routes/index.js:
-
+app.use('/', require('./src/routes/'))
 
 // HomePath:
 app.all('/', (req, res) => {
