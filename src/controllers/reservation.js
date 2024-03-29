@@ -1,6 +1,8 @@
 "use strict"
 
 const Reservation = require("../models/reservation")
+const User = require('../models/user')
+const Room = require('../models/room')
 
 module.exports = {
     list: async (req, res) => {
@@ -20,12 +22,42 @@ module.exports = {
     },
 
     create: async (req, res) => {
+      const {username, guest_number} = req.body
+
+      const userId = (await User.findOne({username}))._id
+      // console.log(userId);
+      req.body.userId=userId
+      let room;
+      if(!req.body.bedType){
+        if(guest_number === 1){
+          room = await Room.find({bedType:"single"})
+          
+      }else  if(guest_number === 2){
+        room = await Room.find({bedType:"double"})
+       
+      }
+      else  if(guest_number>=3 && guest_number <6){
+        room = await Room.find({bedType:"family"})
+       
+      }
+      else  if(guest_number>=6){
+        room = await Room.find({bedType:"king"})
       
+      }else{
+          res.errorStatusCode = 404
+          throw new Error('Enter a valid guest number')
+      }
+      
+      console.log(room[0]._id);
+      }else{
+        const clientQuery = await Room.find({bedType:req.body.bedType})
+        console.log(clientQuery[0]._id);
+      }
+      
+      // const data = await Reservation.create(req.body)
 
-      const data = await Reservation.create(req.body)
 
-
-      rs.status(201).send({
+      res.status(201).send({
         error: false,
         data
       })
