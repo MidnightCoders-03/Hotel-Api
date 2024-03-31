@@ -86,7 +86,8 @@ module.exports = {
         { arrival_date: { $gt: req.body.departure_date } },
         { departure_date: { $lt: req.body.arrival_date } }
       ],
-    })
+    }).distinct("roomId")
+    
     let reservedRoomsArr = []
     for (let reservedRoom of reservedRooms) {
       reservedRoomsArr.push(reservedRoom.roomId)
