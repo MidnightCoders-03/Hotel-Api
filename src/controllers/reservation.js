@@ -76,19 +76,65 @@ module.exports = {
       // console.log(clientQuery[0]._id);
     }
 
-    const reservedRooms = await Reservation.find({
-      $or: [
-        { arrival_date: { $gte: arrival_date, $lte: departure_date } }, // Giriş tarihi bu tarih aralığında olanlar
-        { departure_date: { $gte: arrival_date, $lte: departure_date } }, // Çıkış tarihi bu tarih aralığında olanlar
-      ],
-      roomId: room[0].id,
-    }).populate({ path: "roomId", select: "-_id roomNumber" });
+// console.log(room[0].bedType);
 
-    const allRooms = await Room.find();
-    const availableRooms = allRooms.filter(
-      (room) => !reservedRooms.includes(room._id)
-    );
-    console.log(req.body.roomId);
+
+//  const availableRooms =  await Reservation.find({
+//   bedType:room.bedType,
+//             $nor: [
+//                 { startDate: { $gt: req.body.endDate } },
+//                 { endDate: { $lt: req.body.startDate } }
+//             ]
+//  })
+ const roomStatus =  await Reservation.find({
+  bedType:room.bedType,
+            $nor: [
+                { arrival_date: { $gt: req.body.departure_date } },
+                { departure_date: { $lt: req.body.arrival_date } }
+            ],
+            
+ })
+
+
+//  console.log("****************",roomStatus);
+
+// console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%",room);
+console.log(room[0].roomNumber);
+
+if(roomStatus.length !== 0){
+  console.log("the room you are looking for is not empty at the period of time you requested");
+}else {
+console.log(roomStatus[0] = room[0].roomNumber);  
+
+}
+
+// const hiredRoom = availableRooms.push(room[0]._id)
+
+// console.log("hired room is =>",hiredRoom);
+
+
+
+
+
+
+
+
+
+
+
+    // const reservedRooms = await Reservation.find({
+    //   $or: [
+    //     { arrival_date: { $gte: arrival_date, $lte: departure_date } }, // Giriş tarihi bu tarih aralığında olanlar
+    //     { departure_date: { $gte: arrival_date, $lte: departure_date } }, // Çıkış tarihi bu tarih aralığında olanlar
+    //   ],
+    //   roomId: room[0].id,
+    // }).populate({ path: "roomId", select: "-_id roomNumber" });
+
+    // const allRooms = await Room.find();
+    // const availableRooms = allRooms.filter(
+    //   (room) => !reservedRooms.includes(room._id)
+    // );
+    // console.log(req.body.roomId);
     // if(availableRoom){
     //   throw new Error("The room is not available now, You must enter different time")
     // }
