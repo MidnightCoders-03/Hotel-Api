@@ -1,20 +1,20 @@
 "use strict";
 /*-------------------------------------------------------
-      NODEJS EXPRESS | MIDNIGHT CODERS HOTEL API
+      NODEJS EXPRESS | HOTEL RESERVATION API
 -------------------------------------------------------*/
 const router = require("express").Router();
 /*-------------------------------------------------------*/
-// User Routes:
+// Room Routes:
 
-const User = require("../controllers/user");
+const Room = require("../controllers/room");
 
-router.route("/").get(User.list).post(User.create);
+router.route("/").get(Room.list).post(Room.create);
 
 router
-  .route("/:userId")
-  .get(User.read)
-  .put(User.update)
-  .patch(User.update)
-  .delete(User.delete);
+  .route("/:roomId")
+  .get(Room.read)
+  .put(Room.update)
+  .patch(Room.update)
+  .delete(Room.delete);
 
 module.exports = router;

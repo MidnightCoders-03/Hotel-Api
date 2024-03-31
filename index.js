@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 /* -------------------------------------------------------
     NODEJS EXPRESS | MIDNIGHT CODERS HOTEL API
 ------------------------------------------------------- */
@@ -10,64 +10,64 @@
     $ mkdir logs
     $ nodemon
 */
-const express = require('express')
-const app = express()
+const express = require("express");
+const app = express();
 
 /* ------------------------------------------------------- */
 // Required Modules:
 
 // envVariables to process.env:
-require('dotenv').config()
-const PORT = process.env?.PORT || 8000
-const HOST = process.env?.HOST || '127.0.0.1'
+require("dotenv").config();
+const PORT = process.env?.PORT || 8000;
+const HOST = process.env?.HOST || "127.0.0.1";
 
 // asyncErrors to errorHandler:
-require('express-async-errors')
+require("express-async-errors");
 
 /* ------------------------------------------------------- */
 // Configrations:
 
 // Connect to DB:
-const { dbConnection } = require('./src/configs/dbConnection')
-dbConnection()
+const { dbConnection } = require("./src/configs/dbConnection");
+dbConnection();
 
 /* ------------------------------------------------------- */
 // Middlewares:
 
 // Accept JSON:
-app.use(express.json())
+app.use(express.json());
+
+// Query Handler:
+app.use(require("./src/middlewares/queryHandler"));
 
 // Logger:
 
-
 // Auhentication:
-
+app.use(require("./src/middlewares/authentication"));
 
 // findSearchSortPage / res.getModelList:
-
 
 /* ------------------------------------------------------- */
 // Routes:
 
 // routes/index.js:
-app.use('/', require('./src/routes/'))
+app.use("/", require("./src/routes/"));
 
 // HomePath:
-app.all('/', (req, res) => {
-    res.send({
-        error: false,
-        message: 'Welcome to HOTEL API',
-       
-    })
-})
+app.all("/", (req, res) => {
+  res.send({
+    error: false,
+    message: "Welcome to HOTEL API",
+  });
+});
 
 /* ------------------------------------------------------- */
 
 // errorHandler:
-app.use(require('./src/middlewares/errorHandler'))
+app.use(require("./src/middlewares/errorHandler"));
 
 // RUN SERVER:
-app.listen(PORT, () => console.log('http://127.0.0.1:' + PORT))
+app.listen(PORT, () => console.log("http://127.0.0.1:" + PORT));
 
 /* ------------------------------------------------------- */
 // Syncronization (must be in commentLine):
