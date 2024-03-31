@@ -35,7 +35,7 @@ module.exports = {
   },
 
   create: async (req, res) => {
-    const { username, guest_number, departure_date, arrival_date } = req.body;
+    let { username, guest_number, departure_date, arrival_date } = req.body;
 
     const currentDate = Date.now();
     const arrival = new Date(arrival_date); //! arrival_date in milliseconds
@@ -49,106 +49,65 @@ module.exports = {
     }
 
     const userId = (await User.findOne({ username }))._id;
-    // console.log(userId);
-    req.body.userId = userId;
+
+    if (!userId) {
+      res.errorStatusCode = 404;
+      throw new Error("User name not found!");
+    }
+
     let room;
+    // finding room bedType and calculatin its price if it is not sent in  req body
     if (!req.body.bedType) {
+
+      guest_number = guest_number ? guest_number : 1
+
       if (guest_number === 1) {
         room = await Room.find({ bedType: "single" });
+        console.log(room);
       } else if (guest_number === 2) {
         room = await Room.find({ bedType: "double" });
       } else if (guest_number >= 3 && guest_number < 6) {
         room = await Room.find({ bedType: "family" });
       } else if (guest_number >= 6) {
         room = await Room.find({ bedType: "king" });
-      } else {
-        res.errorStatusCode = 404;
-        throw new Error("Enter a valid guest number");
       }
+
       if (!req.body.price) {
         req.body.price = (await Room.findOne({ _id: room[0]._id })).price;
       }
 
-      // console.log(room[0]._id);
-      req.body.roomId = room[0]._id;
     } else {
       room = await Room.find({ bedType: req.body.bedType });
-      // console.log(clientQuery[0]._id);
     }
+    // find reserved rooms and stor if it is note them in array as a string
+    const reservedRooms = await Reservation.find({
+      bedType: room.bedType,
+      $nor: [
+        { arrival_date: { $gt: req.body.departure_date } },
+        { departure_date: { $lt: req.body.arrival_date } }
+      ],
+    })
+    let reservedRoomsArr = []
+    for (let reservedRoom of reservedRooms) {
+      reservedRoomsArr.push(reservedRoom.roomId)
+    }
+    // filter the rooms usung not in function and giving the bedTyoe option.
+    const availableRooms = await Room.find({ '_id': { $nin: reservedRoomsArr }, "bedType": room[0].bedType })
+    // if it is not found throw an error
+    if (availableRooms.length === 0) throw new Error("the room you are looking for is not empty at the period of time you requested")
 
-// console.log(room[0].bedType);
-
-
-//  const availableRooms =  await Reservation.find({
-//   bedType:room.bedType,
-//             $nor: [
-//                 { startDate: { $gt: req.body.endDate } },
-//                 { endDate: { $lt: req.body.startDate } }
-//             ]
-//  })
- const roomStatus =  await Reservation.find({
-  bedType:room.bedType,
-            $nor: [
-                { arrival_date: { $gt: req.body.departure_date } },
-                { departure_date: { $lt: req.body.arrival_date } }
-            ],
-            
- })
-
-
-//  console.log("****************",roomStatus);
-
-// console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%",room);
-console.log(room[0].roomNumber);
-
-if(roomStatus.length !== 0){
-  console.log("the room you are looking for is not empty at the period of time you requested");
-}else {
-console.log(roomStatus[0] = room[0].roomNumber);  
-
-}
-
-// const hiredRoom = availableRooms.push(room[0]._id)
-
-// console.log("hired room is =>",hiredRoom);
-
-
-
-
-
-
-
-
-
-
-
-    // const reservedRooms = await Reservation.find({
-    //   $or: [
-    //     { arrival_date: { $gte: arrival_date, $lte: departure_date } }, // Giriş tarihi bu tarih aralığında olanlar
-    //     { departure_date: { $gte: arrival_date, $lte: departure_date } }, // Çıkış tarihi bu tarih aralığında olanlar
-    //   ],
-    //   roomId: room[0].id,
-    // }).populate({ path: "roomId", select: "-_id roomNumber" });
-
-    // const allRooms = await Room.find();
-    // const availableRooms = allRooms.filter(
-    //   (room) => !reservedRooms.includes(room._id)
-    // );
-    // console.log(req.body.roomId);
-    // if(availableRoom){
-    //   throw new Error("The room is not available now, You must enter different time")
-    // }
-
+    // Update req body 
+    req.body.userId = userId;
+    req.body.roomId = availableRooms[0]._id;
     req.body.night = nightCalc(arrival_date, departure_date);
-    // console.log(night);
     req.body.totalPrice = req.body.night * req.body.price;
 
-    // console.log(req.body);
-    // const data = await Reservation.create(req.body);
+    // create a reservation 
+    const data = await Reservation.create(req.body);
 
     res.status(201).send({
       error: false,
-      // data,
+      data,
     });
   },
 
@@ -190,3 +149,35 @@ console.log(roomStatus[0] = room[0].roomNumber);
     });
   },
 };
+
+// const hiredRoom = availableRooms.push(room[0]._id)
+
+// console.log("hired room is =>",hiredRoom);
+
+
+// const reservedRooms = await Reservation.find({
+//   $or: [
+//     { arrival_date: { $gte: arrival_date, $lte: departure_date } }, // Giriş tarihi bu tarih aralığında olanlar
+//     { departure_date: { $gte: arrival_date, $lte: departure_date } }, // Çıkış tarihi bu tarih aralığında olanlar
+//   ],
+//   roomId: room[0].id,
+// }).populate({ path: "roomId", select: "-_id roomNumber" });
+
+// const allRooms = await Room.find();
+// const availableRooms = allRooms.filter(
+//   (room) => !reservedRooms.includes(room._id)
+// );
+// console.log(req.body.roomId);
+// if(availableRoom){
+//   throw new Error("The room is not available now, You must enter different time")
+// }
+// console.log(room[0].bedType);
+
+
+//  const availableRooms =  await Reservation.find({
+//   bedType:room.bedType,
+//             $nor: [
+//                 { startDate: { $gt: req.body.endDate } },
+//                 { endDate: { $lt: req.body.startDate } }
+//             ]
+//  })
