@@ -40,6 +40,7 @@ app.set("view engine", "ejs");
 app.set("views", "./public");
 
 const path = require('path');
+
 // Statik dosyaları sun
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -84,7 +85,7 @@ app.all("/", (req, res) => {
   //   error: false,
   //   message: "Welcome to HOTEL API",
   // });
-  res.render("rooms");
+  res.render("index");
 });
 
 /* ------------------------------------------------------- */
