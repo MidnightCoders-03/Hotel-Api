@@ -37,9 +37,9 @@ require("express-async-errors");
 app.set("view engine", "ejs");
 
 // default template folder: ./views/
-app.set('views', './public')
+app.set("views", "./public");
 
-// app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 /* ------------------------------------------------------- */
 // Configrations:
 
@@ -54,7 +54,7 @@ dbConnection();
 app.use(express.json());
 
 // Accept form-urlencoded and convert to object:
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
 // Query Handler:
 app.use(require("./src/middlewares/queryHandler"));
@@ -64,13 +64,12 @@ app.use(require("./src/middlewares/queryHandler"));
 // Auhentication:
 app.use(require("./src/middlewares/authentication"));
 
-
-
 /* ------------------------------------------------------- */
 // Routes:
 
 // routes/index.js:
-app.use("/", require("./src/routes/"));
+app.use("/api", require("./src/routes/"));
+app.use("/view", require("./src/routes/view.router"));
 
 // HomePath:
 app.all("/", (req, res) => {
@@ -78,7 +77,7 @@ app.all("/", (req, res) => {
   //   error: false,
   //   message: "Welcome to HOTEL API",
   // });
-  res.render('index')
+  res.render("index");
 });
 
 /* ------------------------------------------------------- */

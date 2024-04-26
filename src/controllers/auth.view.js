@@ -39,7 +39,7 @@ module.exports = {
   //     user:user
   //   });
 
-  res.render('public/login')
+  res.render('login')
   },
 
   logout: async (req, res) => {
