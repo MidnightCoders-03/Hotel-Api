@@ -14,9 +14,10 @@ const router = require('express').Router()
 
 
 
+
 router.all('/', auth.login)
 router.all('/home', reservation.list)
-router.all('/rooms', room.list)
+router.all('/rooms',room.list)
 
 
 
