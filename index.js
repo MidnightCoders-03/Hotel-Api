@@ -39,7 +39,13 @@ app.set("view engine", "ejs");
 // default template folder: ./views/
 app.set("views", "./public");
 
-app.use(express.static(__dirname + '/public'));
+const path = require('path');
+// Statik dosyaları sun
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+// app.use(express.static(__dirname + '/public'));
+// app.use('/static', express.static('./public/css'))
 /* ------------------------------------------------------- */
 // Configrations:
 
@@ -71,13 +77,14 @@ app.use(require("./src/middlewares/authentication"));
 app.use("/api", require("./src/routes/"));
 app.use("/view", require("./src/routes/view.router"));
 
+
 // HomePath:
 app.all("/", (req, res) => {
   // res.send({
   //   error: false,
   //   message: "Welcome to HOTEL API",
   // });
-  res.render("index");
+  res.render("rooms");
 });
 
 /* ------------------------------------------------------- */

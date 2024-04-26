@@ -59,8 +59,8 @@
         </div>
         <nav class="mainmenu mobile-menu">
             <ul>
-                <li class="active"><a href="./index.html">Home</a></li>
-                <li><a href="./rooms.html">Rooms</a></li>
+                <li class="active"><a href="/view/home">Home</a></li>
+                <li><a href="/view/rooms">Rooms</a></li>
                 <li><a href="./about-us.html">About Us</a></li>
                 <li><a href="./pages.html">Pages</a>
                     <ul class="dropdown">
@@ -185,12 +185,17 @@
     <section class="rooms-section spad">
         <div class="container">
             <div class="row">
+                <% console.log(data); %>
+                <% for(let room of data) { %>
+
                 <div class="col-lg-4 col-md-6">
+
+
                     <div class="room-item">
-                        <img src="img/room/room-1.jpg" alt="">
+                        <img src="<%= room.image[0] %>" alt="">
                         <div class="ri-text">
-                            <h4>Premium King Room</h4>
-                            <h3>159$<span>/Pernight</span></h3>
+                            <h4><%= room.roomNumber %></h4>
+                            <h3><%= room.price %><span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>
@@ -203,7 +208,7 @@
                                     </tr>
                                     <tr>
                                         <td class="r-o">Bed:</td>
-                                        <td>King Beds</td>
+                                        <td><%= room.bedType %></td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Services:</td>
@@ -213,8 +218,13 @@
                             </table>
                             <a href="#" class="primary-btn">More Details</a>
                         </div>
+                    
                     </div>
+
                 </div>
+
+                <% } %>
+
                 <div class="col-lg-4 col-md-6">
                     <div class="room-item">
                         <img src="img/room/room-2.jpg" alt="">
