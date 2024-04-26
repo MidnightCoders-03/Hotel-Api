@@ -32,7 +32,7 @@ module.exports = {
     //   details: await res.getModelListDetails(Reservation, customFilter),
     //   data,
     // });
-    res.render('index');
+    res.render('home');
   },
 
   create: async (req, res) => {

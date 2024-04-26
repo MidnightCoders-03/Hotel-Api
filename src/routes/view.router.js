@@ -11,7 +11,7 @@ const router = require('express').Router()
 
 
 router.all('/', auth.login)
-router.all('/main', reservation.list)
+router.all('/home', reservation.list)
 
 // router.get('/create', todo.create) // form view
 // router.post('/create', todo.create) // form send

@@ -46,7 +46,7 @@ module.exports = {
 
         // const data = await Todo.update(req.body, { where: { id: req.params.id } })
 
-        res.redirect('/')
+        res.redirect('/view/home')
 
     } else {
     // VIEW:
