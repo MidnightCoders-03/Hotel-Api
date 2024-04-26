@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <!-- Css Styles -->
-       <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
     <style>
       .divider:after,
       .divider:before {
@@ -36,15 +36,12 @@
             />
           </div>
           <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-            <form>
-            
-
-          
-
+            <form method="POST" action="">
               <!-- Email input -->
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
                   type="email"
+                  name="email"
                   id="form3Example3"
                   class="form-control form-control-lg"
                   placeholder="Enter a valid email address"
@@ -58,6 +55,7 @@
               <div data-mdb-input-init class="form-outline mb-3">
                 <input
                   type="password"
+                  name="password"
                   id="form3Example4"
                   class="form-control form-control-lg"
                   placeholder="Enter password"
@@ -83,7 +81,7 @@
 
               <div class="text-center text-lg-start mt-4 pt-2">
                 <button
-                  type="button"
+                  type="submit"
                   data-mdb-button-init
                   data-mdb-ripple-init
                   class="btn btn-primary btn-lg"
@@ -127,6 +125,5 @@
         <!-- Right -->
       </div>
     </section>
-   
   </body>
 </html>

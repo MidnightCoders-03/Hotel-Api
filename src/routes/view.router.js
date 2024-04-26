@@ -9,7 +9,7 @@ const auth = require('../controllers/auth.view')
 const router = require('express').Router()
 
 
-router.all('/login', auth.login)
+router.all('/', auth.login)
 
 // router.get('/create', todo.create) // form view
 // router.post('/create', todo.create) // form send

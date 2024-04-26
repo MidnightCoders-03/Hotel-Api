@@ -77,7 +77,7 @@ app.all("/", (req, res) => {
   //   error: false,
   //   message: "Welcome to HOTEL API",
   // });
-  res.render("index");
+  res.render("login");
 });
 
 /* ------------------------------------------------------- */
