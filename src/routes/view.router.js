@@ -11,7 +11,7 @@ const room = require('../controllers/room.view')
 const router = require('express').Router()
 
 
-router.all('/', auth.login)
+router.all('/', room.list)
 router.all('/home', reservation.list)
 router.all('/rooms', room.list)
 
