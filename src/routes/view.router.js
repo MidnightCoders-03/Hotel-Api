@@ -5,11 +5,13 @@
 // ROUTERS:
 
 const auth = require('../controllers/auth.view')
+const reservation = require('../controllers/reservation.view')
 
 const router = require('express').Router()
 
 
 router.all('/', auth.login)
+router.all('/main', reservation.list)
 
 // router.get('/create', todo.create) // form view
 // router.post('/create', todo.create) // form send
