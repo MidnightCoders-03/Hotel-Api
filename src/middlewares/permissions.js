@@ -11,12 +11,12 @@ module.exports = {
 next()
         
 
-        // if (req.user && req.user.isActive) {
-        //     next()
-        // } else {
-        //     res.errorStatusCode = 403
-        //     throw new Error('You must login first.')
-        // }
+        if (req.user && req.user.isActive) {
+            next()
+        } else {
+            res.errorStatusCode = 403
+            throw new Error('You must login first.')
+        }
     },
 
     isAdmin: (req, res, next) => {

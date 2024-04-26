@@ -25,6 +25,22 @@ const HOST = process.env?.HOST || "127.0.0.1";
 require("express-async-errors");
 
 /* ------------------------------------------------------- */
+//* TEMPLATE - EJS
+// $ npm i ejs
+// https://ejs.co/
+// https://www.npmjs.com/package/ejs
+// https://github.com/mde/ejs/wiki/Using-EJS-with-Express
+
+// Setting template engine:
+// console.log(app)
+
+app.set("view engine", "ejs");
+
+// default template folder: ./views/
+app.set('views', './public')
+
+// app.use(express.static(__dirname + '/public'));
+/* ------------------------------------------------------- */
 // Configrations:
 
 // Connect to DB:
@@ -37,6 +53,9 @@ dbConnection();
 // Accept JSON:
 app.use(express.json());
 
+// Accept form-urlencoded and convert to object:
+app.use(express.urlencoded({ extended: true }))
+
 // Query Handler:
 app.use(require("./src/middlewares/queryHandler"));
 
@@ -45,7 +64,7 @@ app.use(require("./src/middlewares/queryHandler"));
 // Auhentication:
 app.use(require("./src/middlewares/authentication"));
 
-// findSearchSortPage / res.getModelList:
+
 
 /* ------------------------------------------------------- */
 // Routes:
@@ -55,10 +74,11 @@ app.use("/", require("./src/routes/"));
 
 // HomePath:
 app.all("/", (req, res) => {
-  res.send({
-    error: false,
-    message: "Welcome to HOTEL API",
-  });
+  // res.send({
+  //   error: false,
+  //   message: "Welcome to HOTEL API",
+  // });
+  res.render('index')
 });
 
 /* ------------------------------------------------------- */
