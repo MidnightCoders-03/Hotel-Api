@@ -11,12 +11,12 @@ const passwordEncrypt = require("../helpers/passwordEncrypt");
 module.exports = {
   login: async (req, res) => {
     const { username, email, password } = req.body;
-    if (!((username || email) && password)) {
+    if (!(username && email && password)) {
       res.errorStatusCode = 403;
       throw new Error("Please provide the credentials");
     }
     const user = await User.findOne({
-      $or: [{ username }, { email }],
+      $and: [{ username }, { email }],
       password,
     }); //passwordEncrypt yapmaya gerek yok
 

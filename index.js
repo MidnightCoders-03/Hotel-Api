@@ -63,6 +63,7 @@ app.use(express.json());
 // Accept form-urlencoded and convert to object:
 app.use(express.urlencoded({ extended: true }));
 
+app.use(require("cors")())
 // Query Handler:
 app.use(require("./src/middlewares/queryHandler"));
 

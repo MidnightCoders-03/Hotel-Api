@@ -38,7 +38,7 @@ module.exports = {
     res.status(202).send({
       error: false,
       data: data,
-      newdata: newdata,
+      newdata,
     });
   },
   delete: async (req, res) => {
