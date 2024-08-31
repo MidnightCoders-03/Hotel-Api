@@ -37,6 +37,10 @@ dbConnection();
 // Accept JSON:
 app.use(express.json());
 
+app.use(express.urlencoded({extended: true}))
+
+app.use(require("cors")())
+
 // Query Handler:
 app.use(require("./src/middlewares/queryHandler"));
 
