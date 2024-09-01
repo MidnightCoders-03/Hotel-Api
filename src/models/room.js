@@ -3,11 +3,11 @@
     NODEJS EXPRESS |  MIDNIGHT CODERS HOTEL API
 ------------------------------------------------------- */
 
-const { mongoose } = require("../configs/dbConnection");
-/* ------------------------------------------------------- */
+
+const { mongoose: { Schema, model }} = require("../configs/dbConnection")/* ------------------------------------------------------- */
 
 // Room Schema
-const RoomSchema = new mongoose.Schema(
+const RoomSchema = new Schema(
   {
     roomNumber: {
       type: String,
@@ -41,5 +41,5 @@ const RoomSchema = new mongoose.Schema(
 );
 
 // Room Model:
-module.exports = mongoose.model("Room", RoomSchema);
+module.exports = model("Room", RoomSchema);
  
