@@ -20,7 +20,7 @@ module.exports = {
                 required: 'true',
                 schema: {
                     username: "testF0",
-                    password: "1234"
+                    password: "aA?123456"
                 }
             }
         */
@@ -29,7 +29,7 @@ module.exports = {
 
     if (!(username && email && password)) {
       res.errorStatusCode = 400;
-      throw new Error("Username/email and password must be entered");
+      throw new Error("Username,email and password must be entered");
     }
 
     const user = await User.findOne({ $and: [{ username }, { email }], password });
@@ -37,16 +37,19 @@ module.exports = {
     if (!user) {
       res.errorStatusCode = 401;
       throw new Error(
-        "Credentials are wrong please check your username/email and password"
+        "Credentials are wrong please check your username,email and password"
       );
     }
 
-    if (user && user.password == passwordEncrypt(password)) {
-      let tokenData = await Token.findOne({ userId: user._id });
-      let BearerToken = tokenData.Bearer
+    if (user && user.password == passwordEncrypt(password) && user.isActive) {
+      // console.log("user password checked");
+      let tokenData = await Token.findOne({ userId: user.id });
+      // console.log("tokenData: ",tokenData);
       if (!tokenData) {
-        const tokenKey = passwordEncrypt(Date.now() + user._id);
+        const tokenKey = encryptFunc(Date.now() + user._id);
+        // console.log("tokenKey: ",tokenKey);
         tokenData = await Token.create({ userId: user._id, token: tokenKey });
+        // console.log("tokenData",tokenData);
       }
 
      const accessData = {
@@ -56,7 +59,10 @@ module.exports = {
             _id:user._id,
             username:user.username,
             email: user.email,
-            password: user.password
+            password: user.password,
+            isActive: user.isActive,
+            isAdmin: user.isAdmin,
+            isStaff: user.isStaff,
         }
      }
 

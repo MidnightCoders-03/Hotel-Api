@@ -22,6 +22,10 @@ module.exports = {
 
 
   create: async (req, res) => {
+    const userId = req?.user?.id
+    const roomId = req?.body?.roomId
+    const room = await Room.findOne({_id: roomId})
+    
     const data = await Room.create(req.body);
     res.status(201).send({
       error: false,
