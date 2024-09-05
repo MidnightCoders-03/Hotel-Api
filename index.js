@@ -40,6 +40,12 @@ app.use(express.urlencoded({extended: true}))
 const cors = require("cors")
 app.use(cors())
 
+app.use(express.urlencoded({extended: true}))
+
+app.use(require("cors")())
+
+app.use('/uploads', express.static('./uploads'))
+
 // Query Handler:
 app.use(require("./src/middlewares/queryHandler"));
 
@@ -61,6 +67,7 @@ app.all("/", (req, res) => {
   res.send({
     error: false,
     message: "Welcome to HOTEL API",
+    user: req.user
   });
 });
 

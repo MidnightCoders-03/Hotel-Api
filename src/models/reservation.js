@@ -59,26 +59,10 @@ const ReservationSchema = new Schema(
 
     price: {
       type: Number,
-      // required: true,
-      // enum: [100, 150, 200, 300],
     },
 
     totalPrice: {
       type: Number,
-      // required: true,
-      //   set: function(){
-      //     if(this.guest_number == 1){
-      //           return this.totalprice = this.price.enum[0]
-      //     }else if(this.guest_number == 2){
-      //           return this.totalprice = this.price.enum[1]
-      //     }else if(this.guest_number == 4){
-      //         return this.totalprice = this.price.enum[2]
-      //     }else if(this.guest_number > 4 ){
-      //         return this.totalprice = this.price.enum[3]
-      //     }else {
-      //         throw new Error("Please enter a valid number")
-      //     }
-      // }
     },
   },
   {

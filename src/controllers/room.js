@@ -16,10 +16,16 @@ module.exports = {
     res.status(200).send({
       error: false,
       details:await res.getModelListDetails(Room),
-      data: data,
+      data,
     });
   },
+
+
   create: async (req, res) => {
+    const userId = req?.user?.id
+    const roomId = req?.body?.roomId
+    const room = await Room.findOne({_id: roomId})
+    
     const data = await Room.create(req.body);
     res.status(201).send({
       error: false,
@@ -27,6 +33,8 @@ module.exports = {
       data: data,
     });
   },
+
+
   read: async (req, res) => {
     const data = await Room.findOne({ _id: req.params.roomId });
     res.status(202).send({
@@ -34,15 +42,19 @@ module.exports = {
       data: data,
     });
   },
+
+
   update: async (req, res) => {
     const data = await Room.updateOne({ _id: req.params.roomId }, req.body);
-    const newdata = await Room.find({ _id: req.params.roomId });
+    const updatedData = await Room.findOne({ _id: req.params.roomId });
     res.status(202).send({
       error: false,
-      data: data,
-      newdata: newdata,
+      data,
+      updatedData,
     });
   },
+
+
   delete: async (req, res) => {
     const data = await Room.deleteOne({ _id: req.params.roomId });
     res.sendStatus(data.deletedCount >= 1 ? 204 : 404);

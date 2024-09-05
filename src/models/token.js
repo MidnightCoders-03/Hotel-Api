@@ -2,14 +2,15 @@
 /* -------------------------------------------------------
        NODEJS EXPRESS | MIDNIGHT CODERS HOTEL API
 ------------------------------------------------------- */
-const { mongoose } = require('../configs/dbConnection')
+
+const { mongoose: { Schema, model }} = require("../configs/dbConnection")
 /* ------------------------------------------------------- */
 // Token Model:
 
-const TokenSchema = new mongoose.Schema({
+const TokenSchema = new Schema({
 
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,
         unique: true,
@@ -30,4 +31,4 @@ const TokenSchema = new mongoose.Schema({
 })
 
 // Model:
-module.exports = mongoose.model('Token', TokenSchema)
+module.exports = model('Token', TokenSchema)

@@ -7,8 +7,9 @@ const router = require("express").Router();
 // Room Routes:
 
 const Room = require("../controllers/room");
+const { isAdmin, isStaff } = require("../middlewares/permissions")
 
-router.route("/").get(Room.list).post(Room.create);
+router.route("/").get(Room.list).post(isAdmin || isStaff,Room.create);
 
 router
   .route("/:roomId")

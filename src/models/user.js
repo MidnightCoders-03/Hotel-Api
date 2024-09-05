@@ -3,60 +3,51 @@
     NODEJS EXPRESS | MIDNIGHT CODERS HOTEL API
 ------------------------------------------------------- */
 
-const { mongoose } = require("../configs/dbConnection");
-/* ------------------------------------------------------- */
+const { mongoose: { Schema, model }} = require("../configs/dbConnection")
 // User Model:
 
-const passwordEncrypt = require("../helpers/passwordEncrypt");
+const { passwordEncrypt, emailValidate } = require("../helpers/validationHelpers");
 
-/* ------------------------------------------------------- */
-
-//? PASSWORD VALIDATOR FUNCTION
-const validatePassword = function (pass) {
-  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-  return re.test(pass);
-};
-
-//? EMAIL VALIDATOR FUNCTION
-const validateEmail = function (email) {
-  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  return re.test(email);
-};
-/* ------------------------------------------------------- */
 
 // User Schema
-const userSchema = new mongoose.Schema(
+const UserSchema = new Schema(
   {
     username: {
       type: String,
       trim: true,
-      required: [true, "Email is required"],
+      required: true,
       unique: true,
+      index: true
     },
+
+    firstName: {
+      type: String,
+      trim: true,
+      required: true,
+  },
+
+  lastName: {
+      type: String,
+      trim: true,
+      required: true,
+  },
+
     email: {
       type: String,
       trim: true,
       unique: true,
-      required: [true, "Email is required"],
-      validate: [
-        validateEmail,
-        "Please enter a valid email  *validateEmail function* ",
-      ],
+      index: true,
+      required: true,
+      set: (email) => emailValidate(email)
     },
+
     password: {
       type: String,
       trim: true,
-      required: [true, "Password is required"],
-      set: (password) => {
-        if (validatePassword(password)) {
-          return passwordEncrypt(password);
-        } else {
-          throw new Error(
-            "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character and at least 8 characters in length"
-          );
-        }
-      },
+      required: true,
+      set: (password) => passwordEncrypt(password)
     },
+
     isActive: {
       type: Boolean,
       default: true,
@@ -71,8 +62,6 @@ const userSchema = new mongoose.Schema(
       default:false
     },
 
-    firstName: String,
-    lastName: String,
     maidenName: String,
     age: Number,
     gender: String,
@@ -99,4 +88,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = model("User", UserSchema);
