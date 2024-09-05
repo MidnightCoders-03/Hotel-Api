@@ -17,8 +17,9 @@ const nightCalc = (arrival_date, departure_date) => {
 
 module.exports = {
   list: async (req, res) => {
+console.log(req.user);
     let customFilter = {};
-    if (!req.user.isAdmin && !req.user.isStaff) {
+    if (!req.user.isAdmin || !req.user.isStaff) {
       customFilter = { userId: req.user.id };
     }
 
@@ -45,7 +46,7 @@ module.exports = {
     const currentDate = Date.now();
     const arrival = new Date(arrival_date).getTime(); //! arrival_date in milliseconds
     const departure = new Date(departure_date).getTime(); //! departure_date in
-    const notPassed = currentDate < arrival || currentDate > departure;
+    const notPassed = currentDate > arrival || currentDate > departure;
     const invalidDate = arrival > departure;
 // console.log(arrival, typeof arrival); 
 // console.log(arrival == currentDate); 
@@ -70,7 +71,7 @@ module.exports = {
 
       if (guest_number === 1) {
         room = await Room.find({ bedType: "single" });
-        console.log(room);
+        // console.log(room);
       } else if (guest_number === 2) {
         room = await Room.find({ bedType: "double" });
       } else if (guest_number >= 3 && guest_number < 6) {
@@ -88,7 +89,7 @@ module.exports = {
     }
     // find reserved rooms and stor if it is note them in array as a string
 
-    console.log("room: ", room);
+    // console.log("room: ", room);
     const reservedRooms = await Reservation.find({
       bedType: room.bedType,
       $nor: [
@@ -97,7 +98,7 @@ module.exports = {
       ],
     }).distinct("roomId")
     
-console.log("reservedRooms: ",reservedRooms);
+// console.log("reservedRooms: ",reservedRooms);
 
     let reservedRoomsArr = []
     for (let reservedRoom of reservedRooms) {
@@ -105,7 +106,7 @@ console.log("reservedRooms: ",reservedRooms);
     }
     // filter the rooms using not in function and giving the bedType option.
     const availableRooms = await Room.find({ '_id': { $nin: reservedRoomsArr }, "bedType": room[0].bedType })
-    console.log("available rooms:", availableRooms);
+    // console.log("available rooms:", availableRooms);
     // if it is not found throw an error
     if (availableRooms.length === 0) throw new Error("the room you are looking for is not empty at the period of time you requested")
 
@@ -117,7 +118,7 @@ console.log("reservedRooms: ",reservedRooms);
 
     // create a reservation 
     const data = await Reservation.create(req.body);
-console.log("data in reservation: ", data);
+// console.log("data in reservation: ", data);
     res.status(201).send({
       error: false,
       data,

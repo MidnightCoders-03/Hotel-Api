@@ -64,6 +64,7 @@ app.all("/", (req, res) => {
   res.send({
     error: false,
     message: "Welcome to HOTEL API",
+    user: req.user
   });
 });
 
