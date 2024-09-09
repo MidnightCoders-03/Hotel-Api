@@ -46,7 +46,7 @@ console.log(req.user);
     const currentDate = Date.now();
     const arrival = new Date(arrival_date).getTime(); //! arrival_date in milliseconds
     const departure = new Date(departure_date).getTime(); //! departure_date in
-    const notPassed = currentDate > arrival || currentDate > departure;
+    const notPassed = currentDate < arrival || currentDate > departure;
     const invalidDate = arrival > departure;
 // console.log(arrival, typeof arrival); 
 // console.log(arrival == currentDate); 

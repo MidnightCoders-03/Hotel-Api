@@ -19,6 +19,8 @@ router.use('/tokens', require('./token'))
 router.use('/reservations', require('./reservation'))
 // room:
 router.use('/rooms', require('./room'))
+// messages:
+router.use('/messages', require('./message'))
 
 
 // document:

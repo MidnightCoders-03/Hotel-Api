@@ -263,4 +263,33 @@ module.exports = async function() {
     }
   ])
   console.log("---Rooms added---");
+
+  const Message = require("../models/message")
+  await Message.create([
+    {
+      _id: "66df6735f68fa0d077febe66",
+      content:
+        "The room was spotless and had a fantastic view of the city skyline. Loved the modern decor and comfortable bed. Will definitely stay again!",
+        userId:"65343222b67e9681f937f518"
+    },
+    {
+      _id: "66df6735f68fa0d077febe67",
+      content:
+        "A bit smaller than expected, but the room was cozy and clean. The bathroom amenities were top-notch, and the staff was super friendly.",
+        userId:"65343222b67e9681f937f517"
+    },
+    {
+      _id: "66df6735f68fa0d077febe68",
+      content:
+        "I had a pleasant stay, though the room could use better soundproofing. Overall, the location was excellent and the service was quick.",
+        userId:"65343222b67e9681f937f516"
+    },
+    {
+      _id: "66df6735f68fa0d077febe69",
+      content:
+        "The room was spacious and well-equipped, but the air conditioning was too loud at night. Otherwise, everything was perfect.",
+        userId:"65343222b67e9681f937f515"
+    },
+  ]);
+  console.log("---Messages added---");
 }
