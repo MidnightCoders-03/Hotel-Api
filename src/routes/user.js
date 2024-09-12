@@ -8,7 +8,6 @@ const router = require("express").Router();
 
 const User = require("../controllers/user");
 const { isLogin } = require("../middlewares/permissions")
-router.use(isLogin)
 
 router.route("/")
 .get(User.list)

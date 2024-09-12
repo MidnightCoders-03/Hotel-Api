@@ -58,14 +58,14 @@ module.exports = {
 
     // //! AUTO LOGIN:
 
-    // const tokenData = await Token.create({
-    //     userId: data._id,
-    //     token: encryptFunc(data._id + Date.now())
-    // })
+    const tokenData = await Token.create({
+        userId: data._id,
+        token: encryptFunc(data._id + Date.now())
+    })
 
     res.status(201).send({
       error: false,
-      // token: tokenData.token,
+      token: tokenData.token,
       data,
     });
   },
