@@ -73,7 +73,10 @@ const UserSchema = new Schema(
       state: String,
       postalCode: String,
     },
-    profilePhoto: String, // URL TO IMAGE, MULTER UPLOAD
+    image: {
+      type: String,
+      trim: true
+    }, // URL TO IMAGE, MULTER UPLOAD
     bank: {                 
       cardExpire: String,
       cardNumber: String,

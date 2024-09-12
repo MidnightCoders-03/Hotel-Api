@@ -102,7 +102,7 @@ module.exports = {
                 required: true,
                 schema: {
                     "username": "test",
-                    "password": "1234",
+                    "password": "Alone123*",
                     "email": "test@site.com",
                     "isActive": true,
                     "isStaff": false,
@@ -121,15 +121,14 @@ module.exports = {
       ? { _id: req.user?._id }
       : { _id: req.params.userId };
     const data = await User.updateOne(
-      { ...customFilter, isDeleted: false },
+      { ...customFilter },
       req.body,
       { runValidators: true }
     );
-
+console.log(data);
     res.status(202).send({
       error: false,
-      data,
-      updatedData: await User.findOne({ ...customFilter }),
+      data: await User.findOne({ ...customFilter }),
     });
   },
 
