@@ -19,6 +19,11 @@ const MessageSchema = new Schema(
       required: true,
       index: true,
     },
+
+    isRead: {
+      type: Boolean,
+      default: false,
+    }
   },
   {
     collection: "messages",

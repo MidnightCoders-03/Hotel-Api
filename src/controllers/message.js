@@ -101,4 +101,25 @@ module.exports = {
       message: "Requested Message deleted successfully",
     });
   },
+  count: async (req, res) => {
+    const data = await Message.countDocuments();
+    res.status(200).send({
+      error: false,
+      data,
+    });
+  },
+  unRead: async (req, res) => {
+    const data = await Message.countDocuments({ isRead: false });
+    res.status(200).send({
+      error: false,
+      data,
+    });
+  },
+  recent: async (req, res) => {
+    const data = await Message.find().sort({ createdAt: -1 }).limit(5);
+    res.status(200).send({
+      error: false,
+      data,
+    });
+  },
 };
