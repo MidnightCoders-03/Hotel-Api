@@ -70,6 +70,13 @@ app.all("/", (req, res) => {
     user: req.user
   });
 });
+app.all("*", (req, res) => {
+  res.status(404).send({
+    error: true,
+    message: "There is no valid route",
+    user: req.user
+  });
+});
 
 /* ------------------------------------------------------- */
 

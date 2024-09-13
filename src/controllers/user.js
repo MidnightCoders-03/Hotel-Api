@@ -3,6 +3,7 @@
 const { encryptFunc } = require("../helpers/validationHelpers");
 const User = require("../models/user");
 const Token = require("../models/token");
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   list: async (req, res) => {
@@ -55,17 +56,51 @@ module.exports = {
     req.body.isAdmin = false; //* if user sends isAdmin = true it would be accepted as false
     req.body.isStaff = false; //* if user sends isStaff = true it would be accepted as false
     const data = await User.create(req.body);
-
+console.log("data in user create:", data);
     // //! AUTO LOGIN:
 
-    // const tokenData = await Token.create({
-    //     userId: data._id,
-    //     token: encryptFunc(data._id + Date.now())
-    // })
+    const tokenData = await Token.create({
+        userId: data._id,
+        token: encryptFunc(data._id + Date.now())
+    })
+
+    const accessData = {
+      key: process.env.ACCESS_KEY,
+      time: process.env.ACCESS_EXP || "10m",
+      data: {
+          _id:data._id,
+          username:data.username,
+          email: data.email,
+          password: data.password,
+          isActive: data.isActive,
+          isAdmin: data.isAdmin,
+          isStaff: data.isStaff,
+      }
+   }
+
+   const refreshData = {
+      key: process.env.REFRESH_KEY,
+      time: process.env.REFRESH_EXP || '10m',
+      data: {
+          id: data._id,
+          password: data.password
+      }
+   }
+
+   const accessToken = jwt.sign(
+      accessData.data,
+      accessData.key,{ expiresIn: accessData.time})
+
+      const refreshToken = jwt.sign(refreshData.data, refreshData.key, { expiresIn: refreshData.time})
+
 
     res.status(201).send({
       error: false,
-      // token: tokenData.token,
+      token: tokenData.token,
+      bearer: {
+        access: accessToken,
+        refresh: refreshToken
+      },
       data,
     });
   },
@@ -102,7 +137,7 @@ module.exports = {
                 required: true,
                 schema: {
                     "username": "test",
-                    "password": "1234",
+                    "password": "Alone123*",
                     "email": "test@site.com",
                     "isActive": true,
                     "isStaff": false,
@@ -121,15 +156,14 @@ module.exports = {
       ? { _id: req.user?._id }
       : { _id: req.params.userId };
     const data = await User.updateOne(
-      { ...customFilter, isDeleted: false },
+      { ...customFilter },
       req.body,
       { runValidators: true }
     );
-
+console.log(data);
     res.status(202).send({
       error: false,
-      data,
-      updatedData: await User.findOne({ ...customFilter }),
+      data: await User.findOne({ ...customFilter }),
     });
   },
 
