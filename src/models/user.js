@@ -3,11 +3,15 @@
     NODEJS EXPRESS | MIDNIGHT CODERS HOTEL API
 ------------------------------------------------------- */
 
-const { mongoose: { Schema, model }} = require("../configs/dbConnection")
+const {
+  mongoose: { Schema, model },
+} = require("../configs/dbConnection");
 // User Model:
 
-const { passwordEncrypt, emailValidate } = require("../helpers/validationHelpers");
-
+const {
+  passwordEncrypt,
+  emailValidate,
+} = require("../helpers/validationHelpers");
 
 // User Schema
 const UserSchema = new Schema(
@@ -17,20 +21,20 @@ const UserSchema = new Schema(
       trim: true,
       required: true,
       unique: true,
-      index: true
+      index: true,
     },
 
     firstName: {
       type: String,
       trim: true,
       required: true,
-  },
+    },
 
-  lastName: {
+    lastName: {
       type: String,
       trim: true,
       required: true,
-  },
+    },
 
     email: {
       type: String,
@@ -38,14 +42,14 @@ const UserSchema = new Schema(
       unique: true,
       index: true,
       required: true,
-      set: (email) => emailValidate(email)
+      set: (email) => emailValidate(email),
     },
 
     password: {
       type: String,
       trim: true,
       required: true,
-      set: (password) => passwordEncrypt(password)
+      set: (password) => passwordEncrypt(password),
     },
 
     isActive: {
@@ -57,32 +61,60 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    isStaff:{
-      type:Boolean,
-      default:false
+    isStaff: {
+      type: Boolean,
+      default: false,
     },
 
-    maidenName: String,
+    maidenName: {
+      type: String,
+      trim: true,
+    },
+
     age: Number,
     gender: String,
     birthDate: Date,
     phoneNumber: String,
+
     address: {
       address: String,
       city: String,
       state: String,
       postalCode: String,
     },
+
     image: {
       type: String,
-      trim: true
-    }, // URL TO IMAGE, MULTER UPLOAD
-    bank: {                 
-      cardExpire: String,
-      cardNumber: String,
+      trim: true,
+    }, // URL TO IMAGE, MULTER UPLOAD(OPTIONAL)
+
+    bank: {
+      cardExpire: {
+        type: String,
+        trim: true,
+        // required: true,
+      },
+
+      cardNumber: {
+        type: String,
+        trim: true,
+        // required: true,
+        // unique: process.env.NODE_ENV === 'production',
+      },
+
       cardType: String,
-      currency: String,
-      iban: String,
+      currency: {
+        type: String,
+        enum: ["usd", "eur", "gbp", "try", "aud"], 
+        // required: true,
+      },
+
+      IBAN: {
+        type: String,
+        trim: true,
+        // required: true,
+        // unique: process.env.NODE_ENV === 'production',
+      },
     },
   },
   {

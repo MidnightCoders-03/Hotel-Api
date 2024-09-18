@@ -56,7 +56,7 @@ module.exports = {
     req.body.isAdmin = false; //* if user sends isAdmin = true it would be accepted as false
     req.body.isStaff = false; //* if user sends isStaff = true it would be accepted as false
     const data = await User.create(req.body);
-console.log("data in user create:", data);
+// console.log("data in user create:", data);
     // //! AUTO LOGIN:
 
     const tokenData = await Token.create({
@@ -160,7 +160,7 @@ console.log("data in user create:", data);
       req.body,
       { runValidators: true }
     );
-console.log(data);
+// console.log(data);
     res.status(202).send({
       error: false,
       data: await User.findOne({ ...customFilter }),

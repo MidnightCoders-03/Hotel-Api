@@ -108,7 +108,20 @@ module.exports = {
       data,
     });
   },
-  unRead: async (req, res) => {
+  unReadList: async (req, res) => {
+    const data = await Message.countDocuments({ isRead: false });
+    res.status(200).send({
+      error: false,
+      data,
+    });
+  },
+  unReadPost: async (req, res) => {
+    const { messageIds } = req.body;
+    // console.log(messageIds);
+    await Message.updateMany(
+      { _id: { $in: messageIds } },
+      { $set: { isRead: true } }
+    );
     const data = await Message.countDocuments({ isRead: false });
     res.status(200).send({
       error: false,
