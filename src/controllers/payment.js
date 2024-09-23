@@ -26,7 +26,8 @@ module.exports = {
       currency,
       userId: req?.user?._id,
       paymentIntentId: paymentIntent.id,
-      status: paymentIntent.status,
+      // status: paymentIntent.status,
+      status: true,
     });
     const data = await payment.save();
     console.log("data in payment: ", data);

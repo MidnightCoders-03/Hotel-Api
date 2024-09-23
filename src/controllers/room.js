@@ -40,15 +40,15 @@ module.exports = {
   },
 
   update: async (req, res) => {
-    console.log("update rooms: ",  req.body.ratings);
-    console.log("value in:",  req.body.ratings.value)
+    console.log("update rooms: ", req.body.ratings);
+    console.log("value in:", req.body.ratings.value);
     if (req.body.ratings) {
       const { ratings } = req.body;
       const room = await Room.findOne({ _id: req.params.roomId });
       if (!room) throw new Error("Room not found");
       room.ratings.push({
         value: ratings.value,
-        userId: ratings.userId
+        userId: ratings.userId,
       });
       room.averageRating = room.calculateAverageRating();
       const data = await room.save();
@@ -56,15 +56,16 @@ module.exports = {
         error: false,
         data,
       });
-    }
-    await Room.updateOne({ _id: req.params.roomId }, req.body);
+    } else {
+      await Room.updateOne({ _id: req.params.roomId }, req.body);
 
-    const data = await Room.findOne({ _id: req.params.roomId });
-    console.log("updated data: ", data);
-    res.status(202).send({
-      error: false,
-      data,
-    });
+      const data = await Room.findOne({ _id: req.params.roomId });
+      console.log("updated data: ", data);
+      res.status(202).send({
+        error: false,
+        data,
+      });
+    }
   },
 
   delete: async (req, res) => {
