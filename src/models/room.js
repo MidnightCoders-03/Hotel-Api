@@ -70,7 +70,7 @@ const RoomSchema = new Schema(
 RoomSchema.methods.calculateAverageRating = function() {
   if (this.ratings.length === 0) return 0;
 
-  const sum = this.ratings.reduce((acc, rating) => acc + rating, 0);
+  const sum = this.ratings.reduce((acc, rating) => acc + rating.value, 0);
   return sum / this.ratings.length;
 };
 
