@@ -3,6 +3,7 @@
 const Reservation = require("../models/reservation");
 const User = require("../models/user");
 const Room = require("../models/room");
+const Payment = require("../models/payment");
 
 const nightCalc = (arrival_date, departure_date) => {
   const arrival = new Date(arrival_date); //! arrival_date in milliseconds
@@ -84,15 +85,33 @@ module.exports = {
     // If the room is available, proceed with reservation
     req.body.userId = userId;
     req.body.roomId = roomInfo._id;
-    req.body.night = nightCalc(arrival_date, departure_date);
-    req.body.totalPrice = req.body.night * req.body.price;
+    // req.body.night = nightCalc(arrival_date, departure_date);
+    // req.body.totalPrice = req.body.night * req.body.price;
+    req.body.status = "waiting";
+    const reservation = await Reservation.create(req.body);
+
+    setTimeout(async () => {
+      const paymentStatus = await Payment.findOne({ userId: user._id });
+  
+      if (paymentStatus && paymentStatus.status) {
+        // Payment successful
+        await Reservation.updateOne({ _id: reservation._id }, { status: "payment successful" });
+        console.log("Payment successful for reservation:", reservation._id);
+      } else {
+        // Revert status to "not booked"
+        await Reservation.updateOne({ _id: reservation._id }, { status: "not booked" });
+        console.log("Reservation not completed for:", reservation._id);
+      }
+    }, 0.5 * 60 * 1000);
     
     // Create a reservation
-    const data = await Reservation.create(req.body);
+    // const paymentStatus = await Payment.findOne({userId});
+
+    // const data = await Reservation.create(req.body);
     
     res.status(201).send({
       error: false,
-      data,
+      data: reservation,
     });
     
   },
@@ -135,4 +154,3 @@ module.exports = {
     });
   },
 };
-
