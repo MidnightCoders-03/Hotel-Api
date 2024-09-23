@@ -17,6 +17,7 @@ module.exports = {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency,
+      automatic_payment_methods: { enabled: true },
     });
 
     const payment = new Payment({
@@ -25,7 +26,8 @@ module.exports = {
       paymentIntentId: paymentIntent.id,
       status: paymentIntent.status,
     });
-    await payment.save();
+   const data = await payment.save();
+  //  console.log("data in payment: ",data);
     res.status(200).send({
       error: false,
       clientSecret: paymentIntent.client_secret,
