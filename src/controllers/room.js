@@ -6,26 +6,23 @@
 
 const Room = require("../models/room");
 
-
 module.exports = {
   list: async (req, res) => {
-
     // const data = await Room.find();
     const data = await res.getModelList(Room);
-    
+
     res.status(200).send({
       error: false,
-      details:await res.getModelListDetails(Room),
+      details: await res.getModelListDetails(Room),
       data,
     });
   },
 
-
   create: async (req, res) => {
-    const userId = req?.user?.id
-    const roomId = req?.body?.roomId
-    const room = await Room.findOne({_id: roomId})
-    
+    const userId = req?.user?.id;
+    const roomId = req?.body?.roomId;
+    const room = await Room.findOne({ _id: roomId });
+
     const data = await Room.create(req.body);
     res.status(201).send({
       error: false,
@@ -33,7 +30,6 @@ module.exports = {
       data: data,
     });
   },
-
 
   read: async (req, res) => {
     const data = await Room.findOne({ _id: req.params.roomId });
@@ -43,21 +39,32 @@ module.exports = {
     });
   },
 
-
   update: async (req, res) => {
-    const data = await Room.updateOne({ _id: req.params.roomId }, req.body);
-    const updatedData = await Room.findOne({ _id: req.params.roomId });
+    console.log("update rooms: ", typeof req.body.ratings);
+    if (req.body.ratings) {
+      const { ratings } = req.body;
+      const room = await Room.findOne({ _id: req.params.roomId });
+      if (!room) throw new Error("Room not found");
+      room.ratings.push(ratings[0]);
+      room.averageRating = room.calculateAverageRating();
+      await room.save();
+      res.status(202).send({
+        error: false,
+        data,
+      });
+    }
+    await Room.updateOne({ _id: req.params.roomId }, req.body);
+
+    const data = await Room.findOne({ _id: req.params.roomId });
+    console.log("updated data: ", data);
     res.status(202).send({
       error: false,
       data,
-      updatedData,
     });
   },
-
 
   delete: async (req, res) => {
     const data = await Room.deleteOne({ _id: req.params.roomId });
     res.sendStatus(data.deletedCount >= 1 ? 204 : 404);
   },
-
 };
