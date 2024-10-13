@@ -12,7 +12,7 @@ router.route("/")
     .get(reservation.list)
     .post(reservation.create)
 
-router.route("/:id")
+router.route("/:reservationId")
     .get(permissions.isLogin, reservation.read)
     .put(permissions.isAdmin, reservation.update)
     .patch(permissions.isAdmin, reservation.update)

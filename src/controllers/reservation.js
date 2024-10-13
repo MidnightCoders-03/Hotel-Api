@@ -117,15 +117,25 @@ module.exports = {
   },
 
   read: async (req, res) => {
-    let customFilter = {};
-    if (!req.user.isAdmin) {
-      customFilter = { userId: req.user.id };
-    }
+  const userId = req.user.id
+  const filter = req.query.filter || {};
+     let customFilter = {};
 
-    const data = await Reservation.findOne({
-      _id: req.params.id,
-      ...customFilter,
-    }).populate(["userId", "roomId"]);
+  if(filter.roomId) {
+    customFilter.roomId = filter.roomId
+  }
+  
+  if(filter.reservationId) {
+  customFilter._id = filter.reservationId
+  }
+  
+  if(filter.userId) {
+   customFilter.userId = filter.userId
+  }
+ 
+  
+
+    const data = await res.getModelList(Reservation,customFilter,["userId", "roomId"])
 
     res.status(200).send({
       error: false,

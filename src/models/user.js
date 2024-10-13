@@ -86,7 +86,7 @@ const UserSchema = new Schema(
     image: {
       type: String,
       trim: true,
-    }, // URL TO IMAGE, MULTER UPLOAD(OPTIONAL)
+    }, 
 
     bank: {
       cardExpire: {
