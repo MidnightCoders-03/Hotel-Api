@@ -59,11 +59,18 @@ const ReservationSchema = new Schema(
 
     price: {
       type: Number,
+      
     },
 
     totalPrice: {
       type: Number,
+      
     },
+    status: {
+      type: String,
+      enum: ["not booked", "waiting", "payment successful"],
+      default: "not booked", 
+    }
   },
   {
     collection: "reservations",

@@ -54,7 +54,7 @@ app.use(require("./src/middlewares/queryHandler"));
 // Auhentication:
 app.use(require("./src/middlewares/authentication"));
 
-// findSearchSortPage / res.getModelList:
+
 
 /* ------------------------------------------------------- */
 // Routes:
